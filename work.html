@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Контрольная работа: ПК и MS Word</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #f0f2f5; color: #333; margin: 0; padding: 20px; }
+        .container { max-width: 850px; margin: auto; background: white; padding: 40px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        
+        /* Стили для формы регистрации */
+        .registration-box { background: #e7f3ff; padding: 20px; border-radius: 10px; margin-bottom: 30px; border: 1px solid #b6d4fe; }
+        .registration-box input { width: calc(50% - 22px); padding: 10px; margin: 10px 5px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px; }
+        
+        h1 { color: #1a73e8; text-align: center; margin-bottom: 10px; }
+        .topic-info { text-align: center; color: #666; margin-bottom: 30px; font-style: italic; }
+        
+        .question { background: #fff; margin-bottom: 15px; padding: 20px; border: 1px solid #eee; border-radius: 8px; transition: 0.3s; }
+        .question:hover { border-color: #1a73e8; }
+        .options label { display: block; margin: 10px 0; cursor: pointer; padding: 10px; border-radius: 6px; border: 1px solid #f0f0f0; }
+        .options label:hover { background: #f8f9fa; }
+        
+        .btn { display: block; width: 100%; padding: 18px; background: #1a73e8; color: white; border: none; border-radius: 8px; font-size: 20px; font-weight: bold; cursor: pointer; margin-top: 30px; }
+        .btn:hover { background: #1557b0; }
+
+        /* Стили для практического задания */
+        #task-section { display: none; margin-top: 40px; padding: 25px; border-top: 3px solid #1a73e8; background: #fafafa; }
+        .word-template { background: white; padding: 20px; border: 1px dashed #444; margin: 20px 0; box-shadow: 0 0 10px rgba(0,0,0,0.05); }
+        
+        #result-header { display: none; background: #d4edda; color: #155724; padding: 20px; border-radius: 10px; text-align: center; margin-bottom: 20px; font-size: 20px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Контрольная работа</h1>
+    <p class="topic-info">Дисциплина: Информатика (Аппаратное обеспечение и MS Word)</p>
+
+    <div class="registration-box" id="reg-form">
+        <h3 style="margin-top:0;">Данные студента:</h3>
+        <input type="text" id="student-name" placeholder="Введите ФИО" required>
+        <input type="text" id="student-group" placeholder="Введите группу" required>
+    </div>
+
+    <div id="quiz-area">
+        <div id="questions-container"></div>
+        <button type="button" class="btn" onclick="finishExam()">Завершить тест и получить задание</button>
+    </div>
+
+    <div id="result-header"></div>
+
+    <div id="task-section">
+        <h2 style="color: #d93025;">Практическое задание в MS Word</h2>
+        <p><strong>Инструкция:</strong> На основе изученного материала создайте документ и оформите его строго по шаблону:</p>
+        
+        <div class="word-template">
+            <p style="text-align: center; font-family: 'Times New Roman'; font-size: 18px; font-weight: bold; text-transform: uppercase;">
+                График технического обслуживания ПК
+            </p>
+            <table border="1" style="width: 100%; border-collapse: collapse; text-align: center; font-family: 'Times New Roman';">
+                <tr style="background-color: #eeeeee; font-weight: bold;">
+                    <td style="padding: 8px;">№</td>
+                    <td style="padding: 8px;">Наименование узла</td>
+                    <td style="padding: 8px;">Вид работы</td>
+                    <td style="padding: 8px;">Периодичность</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>Системный блок</td>
+                    <td>Очистка от пыли</td>
+                    <td>Раз в 6 месяцев</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Процессор</td>
+                    <td>Замена термопасты</td>
+                    <td>Раз в год</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>ОС Windows</td>
+                    <td>Дефрагментация</td>
+                    <td>Ежемесячно</td>
+                </tr>
+            </table>
+        </div>
+
+        <h3>Требования к выполнению:</h3>
+        <ul>
+            <li>Установите поля страницы: все по 2 см.</li>
+            <li>Шрифт основного текста: <strong>Times New Roman</strong>, размер 14.</li>
+            <li>Примените к шапке таблицы <strong>полужирное начертание</strong> и серую заливку.</li>
+            <li>Сохраните файл под названием <code id="file-name-hint">ФИО_Группа.docx</code>.</li>
+        </ul>
+    </div>
+</div>
+
+<script>
+    const questions = [
+        { q: "Что является 'мозгом' компьютера?", a: ["Монитор", "Процессор", "Блок питания"], c: 1 },
+        { q: "Где хранятся данные в данный момент работы?", a: ["ОЗУ (RAM)", "HDD", "Flash"], c: 0 },
+        { q: "Устройство вывода информации на бумагу:", a: ["Сканер", "Принтер", "Мышь"], c: 1 },
+        { q: "Устройство ввода звуковой информации:", a: ["Колонки", "Микрофон", "Наушники"], c: 1 },
+        { q: "К энергонезависимой памяти относится:", a: ["SSD/HDD", "RAM", "Кэш-память"], c: 0 },
+        { q: "Основная задача видеокарты:", a: ["Обработка звука", "Вывод изображения", "Печать"], c: 1 },
+        { q: "Как называется главная плата компьютера?", a: ["Звуковая", "Материнская", "Сетевая"], c: 1 },
+        { q: "Что такое BIOS?", a: ["Игра", "Базовая система ввода-вывода", "Браузер"], c: 1 },
+        { q: "Пример системного ПО:", a: ["Windows 10", "MS Word", "Google Chrome"], c: 0 },
+        { q: "Какая программа защищает от вирусов?", a: ["Excel", "Kaspersky", "PowerPoint"], c: 1 },
+        { q: "Программы-архиваторы нужны для:", a: ["Рисования", "Сжатия файлов", "Просмотра кино"], c: 1 },
+        { q: "Программа для работы с текстом:", a: ["MS Word", "MS Excel", "MS Paint"], c: 0 },
+        { q: "Стандартное расширение файла Word:", a: [".pdf", ".docx", ".exe"], c: 1 },
+        { q: "Горячие клавиши для выделения всего текста:", a: ["Ctrl+A", "Ctrl+S", "Ctrl+P"], c: 0 },
+        { q: "Функция для переноса слов по слогам:", a: ["Шрифт", "Расстановка переносов", "Абзац"], c: 1 },
+        { q: "Как называется расстояние между буквами?", a: ["Интервал", "Кернинг", "Размер"], c: 1 },
+        { q: "В какой вкладке находится вставка таблиц?", a: ["Главная", "Вставка", "Разметка"], c: 1 },
+        { q: "Режим, скрывающий лишние элементы интерфейса:", a: ["Черновик", "Режим чтения", "Веб-документ"], c: 1 },
+        { q: "Зачем нужны колонтитулы?", a: ["Для картинок", "Для нумерации и заголовков на каждой стр.", "Для изменения шрифта"], c: 1 },
+        { q: "Клавиша для удаления символа СЛЕВА от курсора:", a: ["Delete", "Backspace", "End"], c: 1 }
+    ];
+
+    function loadQuestions() {
+        const container = document.getElementById('questions-container');
+        questions.forEach((item, index) => {
+            let html = `<div class="question">
+                <p><strong>${index + 1}. ${item.q}</strong></p>
+                <div class="options">`;
+            item.a.forEach((opt, i) => {
+                html += `<label><input type="radio" name="q${index}" value="${i}"> ${opt}</label>`;
+            });
+            html += `</div></div>`;
+            container.innerHTML += html;
+        });
+    }
+
+    function finishExam() {
+        const name = document.getElementById('student-name').value;
+        const group = document.getElementById('student-group').value;
+
+        if (!name || !group) {
+            alert("Пожалуйста, введите ФИО и группу перед завершением!");
+            return;
+        }
+
+        let score = 0;
+        questions.forEach((item, index) => {
+            const selected = document.querySelector(`input[name="q${index}"]:checked`);
+            if (selected && parseInt(selected.value) === item.c) {
+                score++;
+            }
+        });
+
+        // Показываем результат
+        const resHeader = document.getElementById('result-header');
+        resHeader.style.display = 'block';
+        resHeader.innerHTML = `Студент: <strong>${name}</strong> (гр. ${group}) <br> Результат теста: ${score} из ${questions.length}`;
+
+        // Открываем задачу по Word
+        document.getElementById('task-section').style.display = 'block';
+        document.getElementById('quiz-area').style.display = 'none';
+        document.getElementById('reg-form').style.display = 'none';
+        
+        window.scrollTo(0, 0);
+    }
+
+    loadQuestions();
+</script>
+
+</body>
+</html>
